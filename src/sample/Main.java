@@ -13,6 +13,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
 public class Main extends Application {
 
     //
@@ -20,11 +25,11 @@ public class Main extends Application {
     //
     private final ObservableList<Activity> data =
             FXCollections.observableArrayList(
-                    new Activity(1, 22, "Fishing",7),
-                    new Activity(2, 26, "running",2),
-                    new Activity(33, 16, "Driving to work",-8),
-                    new Activity(7, 21, "Eating out of season fruit",-5),
-                    new Activity(14, 31, "swimming in river",4)
+                    new Activity(1, 22, "Fishing", 7),
+                    new Activity(2, 26, "running", 2),
+                    new Activity(33, 16, "Driving to work", -8),
+                    new Activity(7, 21, "Eating out of season fruit", -5),
+                    new Activity(14, 31, "swimming in river", 4)
             );
 
     @Override
@@ -74,39 +79,60 @@ public class Main extends Application {
         GridPane gridPane = new GridPane();
 
         //setting postions on labels and text fields in grid
-        gridPane.add( labelWeek, 0,0);
-        gridPane.add( textFieldWeek, 1,0);
-        gridPane.add( labelDate, 0,1);
-        gridPane.add( textFieldDate, 1,1);
-        gridPane.add( labelActivity, 0,2);
-        gridPane.add( textFieldActivity, 1,2);
+        gridPane.add(labelWeek, 0, 0);
+        gridPane.add(textFieldWeek, 1, 0);
+        gridPane.add(labelDate, 0, 1);
+        gridPane.add(textFieldDate, 1, 1);
+        gridPane.add(labelActivity, 0, 2);
+        gridPane.add(textFieldActivity, 1, 2);
         gridPane.add(labelPoints, 0, 3);
         gridPane.add(textFieldPoints, 1, 3);
 
-        //Creating all the buttons
+        //Creating buttons
+
+        //add button for adding in new activities
         Button addButton = new Button("add");
         addButton.setOnAction(event -> {
-            String newWeek = textFieldWeek.getText();
+            String newWeek = textFieldWeek.getText(); //getting data out of text field
             String newDate = textFieldDate.getText();
             String newActivity = textFieldActivity.getText();
             String newPoints = textFieldPoints.getText();
-            ListOfActivities.createNewActivity(newWeek,newDate,newActivity,newPoints);
-            textFieldWeek.clear();
+            ListOfActivities.createNewActivity(newWeek, newDate, newActivity, newPoints); //creating new object
+            textFieldWeek.clear(); // clearing text fields
             textFieldDate.clear();
             textFieldActivity.clear();
             textFieldPoints.clear();
-            System.out.println();
         });
-
 
 
         Button removeButton = new Button("remove");
         Button listButton = new Button("list");
         Button summaryButton = new Button("summary");
-        Button loadButton = new Button("load");
+
+        //loads in data from a fixed position
+        Button loadButton = new Button("load"); // have to fix
+        loadButton.setOnAction(event -> {
+            try {
+
+                FileOutputStream file = new FileOutputStream("Save.txt");
+                ObjectOutputStream out = new ObjectOutputStream(file);
+
+                out.writeObject(Activity);
+                out.writeObject(ListOfActivities);
+                out.close();
+                file.close();
+                System.out.println("Serialization complete!");
+            } catch (IOException ex) {
+                System.out.println("IOException is caught");
+            }
+        });
+
+
         Button saveButton = new Button("save");
+
+        // Exit button to end the application
         Button exitButton = new Button("exit");
-        exitButton.setOnAction(e -> Platform.exit());;
+        exitButton.setOnAction(e -> Platform.exit());
 
         //setting postions on buttons in grid
         gridPane.add(addButton, 0, 4);
@@ -116,7 +142,7 @@ public class Main extends Application {
         gridPane.add(table, 0, 5);
         gridPane.add(loadButton, 0, 6);
         gridPane.add(saveButton, 1, 6);
-        gridPane.add(exitButton,3, 6);
+        gridPane.add(exitButton, 3, 6);
 
         //Setting the padding
         gridPane.setPadding(new Insets(10, 10, 10, 10));

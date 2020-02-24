@@ -28,7 +28,7 @@ public class ListOfActivities implements Serializable {
     }
 
     public static void createNewActivity(String week, String date, String activity, String point) {
-        
+        try {
             int weekAsInt = Integer.parseInt(week);
             int dateAsInt = Integer.parseInt(date);
             int pointAsInt = Integer.parseInt(point);
@@ -36,8 +36,10 @@ public class ListOfActivities implements Serializable {
                 new Activity(weekAsInt, dateAsInt, activity, pointAsInt);
                 System.out.println("Activity added");
             } else {
-                System.out.println("Failed to add activity");
+                System.out.println("Some value too high");
             }
-
+        } catch (NumberFormatException nfe) {
+            System.out.println("Please Make sure that proper values are being passed in");
+        }
     }
 }
