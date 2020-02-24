@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -14,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -93,17 +94,40 @@ public class Main extends Application {
         //add button for adding in new activities
         Button addButton = new Button("add");
         addButton.setOnAction(event -> {
-            String newWeek = textFieldWeek.getText(); //getting data out of text field
-            String newDate = textFieldDate.getText();
-            String newActivity = textFieldActivity.getText();
-            String newPoints = textFieldPoints.getText();
-            ListOfActivities.createNewActivity(newWeek, newDate, newActivity, newPoints); //creating new object
+
+            try {
+                int newWeek = Integer.parseInt(textFieldWeek.getText()); //getting data out of text field
+                int newDate = Integer.parseInt(textFieldDate.getText());
+                String newActivity = textFieldActivity.getText();
+                int newPoints = Integer.parseInt(textFieldPoints.getText());
+
+                if ((newPoints > -11) && (newPoints < 11)) {
+                    data.add(new Activity(newWeek, newDate, newActivity, newPoints)); //creating new object
+                    System.out.println("Activity added");
+                } else {
+                    System.out.println("Some value too high");
+                }
+            } catch (NumberFormatException nfe) {
+                System.out.println("Please Make sure that proper values are being passed in");
+            }
             textFieldWeek.clear(); // clearing text fields
             textFieldDate.clear();
             textFieldActivity.clear();
             textFieldPoints.clear();
         });
+        ////
+//        final Button addButton = new Button("Add");
+//        addButton.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override public void handle(ActionEvent e) {
+//                data.add(new Person(addFirstName.getText()addLastName.getText(),addEmail.getText()));
+//                addFirstName.clear();
+//                addLastName.clear();
+//                addEmail.clear();
+//            }
+//        });
+//
 
+        //
 
         Button removeButton = new Button("remove");
         Button listButton = new Button("list");
