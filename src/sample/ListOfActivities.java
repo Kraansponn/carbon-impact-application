@@ -5,27 +5,24 @@ import java.util.ArrayList;
 
 public class ListOfActivities implements Serializable {
 
-    private ArrayList ListOfActivities = new ArrayList<>();
+    private ArrayList<Activity> activities = new ArrayList<>();
 
-    public ListOfActivities(ArrayList listOfActivities) {
-        ListOfActivities = listOfActivities;
+    public ListOfActivities() {
     }
 
-    public ArrayList getListOfActivities() {
-        return ListOfActivities;
+    public ListOfActivities(ArrayList<Activity> activities) {
+        this.activities = activities;
     }
 
-    public void setListOfActivities(ArrayList listOfActivities) {
-        ListOfActivities = listOfActivities;
+
+    public ArrayList<Activity> getActivities() {
+        return activities;
     }
 
-    public boolean addActivity(Activity activity) {
-        return ListOfActivities.add(activity);
+    public void setActivities(ArrayList<Activity> activities) {
+        this.activities = activities;
     }
 
-    public boolean removeActivity(Activity activity) {
-        return ListOfActivities.remove(activity);
-    }
 
     public static void createNewActivity(String week, String date, String activity, String point) {
         try {

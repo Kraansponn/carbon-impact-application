@@ -13,12 +13,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Main extends Application {
+
+    private static ListOfActivities listOfActivities = new ListOfActivities();
 
     //
     private TableView<Activity> table = new TableView<Activity>();
@@ -113,22 +113,40 @@ public class Main extends Application {
         Button loadButton = new Button("load"); // have to fix
         loadButton.setOnAction(event -> {
             try {
+                // Reading the object from a file
+                FileInputStream file = new FileInputStream("Save.ser");
+                ObjectInputStream in = new ObjectInputStream(file);
 
-                FileOutputStream file = new FileOutputStream("Save.txt");
-                ObjectOutputStream out = new ObjectOutputStream(file);
+                listOfActivities = (ListOfActivities) in.readObject();
 
-                out.writeObject(Activity);
-                out.writeObject(ListOfActivities);
-                out.close();
+                in.close();
                 file.close();
-                System.out.println("Serialization complete!");
+
+                System.out.println("Deserialization Complete!//loaded");
             } catch (IOException ex) {
                 System.out.println("IOException is caught");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         });
 
 
         Button saveButton = new Button("save");
+        saveButton.setOnAction(event -> {
+            try {
+                FileOutputStream file = new FileOutputStream("Save.ser"); // defines destination for file
+                ObjectOutputStream out = new ObjectOutputStream(file);
+
+                out.writeObject(listOfActivities); // selects what to save
+
+                out.close();
+                file.close(); //closes file
+                System.out.println("Serialization complete!//Saved");
+            } catch (IOException ex) {
+                System.out.println("IOException is caught");
+            }
+        });
+
 
         // Exit button to end the application
         Button exitButton = new Button("exit");
