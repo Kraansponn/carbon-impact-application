@@ -94,9 +94,8 @@ public class Main extends Application {
         //add button for adding in new activities
         Button addButton = new Button("add");
         addButton.setOnAction(event -> {
-
             try {
-                int newWeek = Integer.parseInt(textFieldWeek.getText()); //getting data out of text field
+                int newWeek = Integer.parseInt(textFieldWeek.getText()); //getting data out of text field and changing to int as needed
                 int newDate = Integer.parseInt(textFieldDate.getText());
                 String newActivity = textFieldActivity.getText();
                 int newPoints = Integer.parseInt(textFieldPoints.getText());
@@ -115,21 +114,13 @@ public class Main extends Application {
             textFieldActivity.clear();
             textFieldPoints.clear();
         });
-        ////
-//        final Button addButton = new Button("Add");
-//        addButton.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override public void handle(ActionEvent e) {
-//                data.add(new Person(addFirstName.getText()addLastName.getText(),addEmail.getText()));
-//                addFirstName.clear();
-//                addLastName.clear();
-//                addEmail.clear();
-//            }
-//        });
-//
-
-        //
 
         Button removeButton = new Button("remove");
+        removeButton.setOnAction(event -> {
+            table.getItems().removeAll(
+                    table.getSelectionModel().getSelectedItems());//removes selected item
+        });
+
         Button listButton = new Button("list");
         Button summaryButton = new Button("summary");
 
@@ -196,25 +187,6 @@ public class Main extends Application {
         //Displaying the Scene
         primaryStage.setScene(new Scene(gridPane));
         primaryStage.show();
-
-//        TabPane tabPane = new TabPane();
-//
-//        Tab tab1 = new Tab("Planes", new Label("Show all planes available"));
-//        Tab tab2 = new Tab("Cars"  , new Label("Show all cars available"));
-//        Tab tab3 = new Tab("Boats" , new Label("Show all boats available"));
-//
-//        tabPane.getTabs().add(tab1);
-//        tabPane.getTabs().add(tab2);
-//        tabPane.getTabs().add(tab3);
-//
-//        VBox vBox = new VBox(tabPane);
-//        Scene scene = new Scene(vBox);
-//
-//        primaryStage.setScene(scene);
-//        primaryStage.setTitle("JavaFX App");
-//
-//        primaryStage.show();
-
 
     }
 
