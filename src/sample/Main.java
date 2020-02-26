@@ -129,6 +129,8 @@ public class Main extends Application {
         listButton.setOnAction(event -> {
             table.refresh();
             //data.();  have to fix this
+            data.removeAll(data);
+            FXCollections.copy(data, data);
         });
         Button summaryButton = new Button("summary");
 
@@ -141,12 +143,22 @@ public class Main extends Application {
         //loads in data from a fixed position
         Button loadButton = new Button("load"); // have to fix
         loadButton.setOnAction(event -> {
+            data.removeAll(data); //clears table
             try {
-                FileInputStream fileIn = new FileInputStream("Save.ser");
+                FileInputStream fileIn = new FileInputStream("Save.ser"); //loads in file
                 ObjectInputStream in = new ObjectInputStream(fileIn);
-                System.out.println("Deserialized Data: \n" + in.readObject().toString());
+
+                List<Activity> list = (List<Activity>) in.readObject() ; //writes file content to temp arrray
+                System.out.println("Data loaded");
+
+                System.out.println("Deserialized Data: \n" + list.toString());
                 in.close();
                 fileIn.close();
+
+                for (int i = 0; i < list.size(); i++) { //loops and adds in content from list to data
+                    data.add(list.get(i));
+                }
+//                FXCollections.copy(data, list); // fills data with content from list
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -154,6 +166,7 @@ public class Main extends Application {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            table.refresh();
         });
 
 //       //loads in data from a fixed position
@@ -186,14 +199,13 @@ public class Main extends Application {
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 oos.writeObject(new ArrayList<Activity>(data));
                 oos.close();
-
+                System.out.println("file saved");
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         });
 //        Button saveButton = new Button("save");
 //        saveButton.setOnAction(event -> {
