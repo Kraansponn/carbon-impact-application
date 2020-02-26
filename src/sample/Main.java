@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Main extends Application {
 
@@ -29,13 +30,7 @@ public class Main extends Application {
     private TableView<Activity> table = new TableView<Activity>();
     //
     private ObservableList<Activity> data =
-            FXCollections.observableArrayList(
-                    new Activity(1, 22, "Fishing", 7),
-                    new Activity(2, 26, "running", 2),
-                    new Activity(33, 16, "Driving to work", -8),
-                    new Activity(7, 21, "Eating out of season fruit", -5),
-                    new Activity(14, 31, "swimming in river", 4)
-            );
+            FXCollections.observableArrayList();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -128,16 +123,26 @@ public class Main extends Application {
         Button listButton = new Button("list");
         listButton.setOnAction(event -> {
             table.refresh();
-            //data.();  have to fix this
-            data.removeAll(data);
-            FXCollections.copy(data, data);
         });
+
         Button summaryButton = new Button("summary");
+        summaryButton.setOnAction(event -> {
 
+                    int pointstotal = 0;
 
+                    for (int i = 0; i < data.size(); i++) {
+                        pointstotal = pointstotal + data.get(i).getPoints();
+                    }
+//                    System.out.println(pointstotal);
 
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Total Of All Points");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Your current point balance is "+pointstotal);
 
-
+                    alert.showAndWait();
+                }
+        );
 
 
         //loads in data from a fixed position
@@ -148,7 +153,7 @@ public class Main extends Application {
                 FileInputStream fileIn = new FileInputStream("Save.ser"); //loads in file
                 ObjectInputStream in = new ObjectInputStream(fileIn);
 
-                List<Activity> list = (List<Activity>) in.readObject() ; //writes file content to temp arrray
+                List<Activity> list = (List<Activity>) in.readObject(); //writes file content to temp arrray
                 System.out.println("Data loaded");
 
                 System.out.println("Deserialized Data: \n" + list.toString());
