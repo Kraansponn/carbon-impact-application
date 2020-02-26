@@ -4,8 +4,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -16,21 +14,15 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Main extends Application {
 
     private static ListOfActivities listOfActivities = new ListOfActivities();
 
-    //
     private TableView<Activity> table = new TableView<Activity>();
-    //
-    private ObservableList<Activity> data =
-            FXCollections.observableArrayList();
+    private ObservableList<Activity> data = FXCollections.observableArrayList(); //creates arraylist to store table data
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -53,11 +45,10 @@ public class Main extends Application {
         TextField textFieldPoints = new TextField();
 
         //Creating a table to display data
-//        final Label label = new Label("Activities Log");
         table.setEditable(false);
-        //table Column names
-        TableColumn<Activity, Integer> weekCol = new TableColumn<>("Week");
-        weekCol.setCellValueFactory(
+
+        TableColumn<Activity, Integer> weekCol = new TableColumn<>("Week");     //table column name
+        weekCol.setCellValueFactory(                                                 //setting cell value
                 new PropertyValueFactory<Activity, Integer>("week"));
 
         TableColumn<Activity, Integer> dateCol = new TableColumn<>("date");
@@ -72,8 +63,8 @@ public class Main extends Application {
         pointsCol.setCellValueFactory(
                 new PropertyValueFactory<Activity, Integer>("points"));
 
-        table.setItems(data);
-        table.getColumns().addAll(weekCol, dateCol, activityCol, pointsCol);
+        table.setItems(data);                                                   //defining where the table gets its data from
+        table.getColumns().addAll(weekCol, dateCol, activityCol, pointsCol);    //adding all the columns to the table
 
         //Creating Grid
         GridPane gridPane = new GridPane();
@@ -90,7 +81,7 @@ public class Main extends Application {
 
         //Creating buttons
 
-        //add button for adding in new activities
+        //button for adding in new activities
         Button addButton = new Button("add");
         addButton.setOnAction(event -> {
             try {
@@ -99,11 +90,11 @@ public class Main extends Application {
                 String newActivity = textFieldActivity.getText();
                 int newPoints = Integer.parseInt(textFieldPoints.getText());
 
-                if ((newPoints > -11) && (newPoints < 11)) {
+                if ((newPoints > -11) && (newPoints < 11)) {                        //making sure the points value is within a desired value
                     data.add(new Activity(newWeek, newDate, newActivity, newPoints)); //creating new object
                     System.out.println("Activity added");
                 } else {
-                    System.out.println("Some value too high");
+                    System.out.println("Some value too high"); //error message
                 }
             } catch (NumberFormatException nfe) {
                 System.out.println("Please Make sure that proper values are being passed in");
@@ -114,39 +105,40 @@ public class Main extends Application {
             textFieldPoints.clear();
         });
 
+        // button to remove entry from table
         Button removeButton = new Button("remove");
         removeButton.setOnAction(event -> {
             table.getItems().removeAll(
                     table.getSelectionModel().getSelectedItems());//removes selected item
         });
 
+        //button to refresh table contents
         Button listButton = new Button("list");
         listButton.setOnAction(event -> {
             table.refresh();
         });
 
+        //button that adds up all of the points
         Button summaryButton = new Button("summary");
         summaryButton.setOnAction(event -> {
 
                     int pointstotal = 0;
 
                     for (int i = 0; i < data.size(); i++) {
-                        pointstotal = pointstotal + data.get(i).getPoints();
+                        pointstotal = pointstotal + data.get(i).getPoints();  //getting the total points value
                     }
-//                    System.out.println(pointstotal);
 
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION); //making a pop up
                     alert.setTitle("Total Of All Points");
                     alert.setHeaderText(null);
-                    alert.setContentText("Your current point balance is "+pointstotal);
+                    alert.setContentText("Your current point balance is " + pointstotal);
 
                     alert.showAndWait();
                 }
         );
 
-
         //loads in data from a fixed position
-        Button loadButton = new Button("load"); // have to fix
+        Button loadButton = new Button("load");
         loadButton.setOnAction(event -> {
             data.removeAll(data); //clears table
             try {
@@ -154,16 +146,13 @@ public class Main extends Application {
                 ObjectInputStream in = new ObjectInputStream(fileIn);
 
                 List<Activity> list = (List<Activity>) in.readObject(); //writes file content to temp arrray
-                System.out.println("Data loaded");
 
-                System.out.println("Deserialized Data: \n" + list.toString());
                 in.close();
                 fileIn.close();
 
                 for (int i = 0; i < list.size(); i++) { //loops and adds in content from list to data
                     data.add(list.get(i));
                 }
-//                FXCollections.copy(data, list); // fills data with content from list
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -173,28 +162,6 @@ public class Main extends Application {
             }
             table.refresh();
         });
-
-//       //loads in data from a fixed position
-//        Button loadButton = new Button("load"); // have to fix
-//        loadButton.setOnAction(event -> {
-//            try {
-//                // Reading the object from a file
-//                FileInputStream file = new FileInputStream("Save.ser");
-//                ObjectInputStream in = new ObjectInputStream(file);
-//
-//                listOfActivities = (ListOfActivities) in.readObject();
-//
-//                in.close();
-//                file.close();
-//
-//                System.out.println("Deserialization Complete!//loaded");
-//            } catch (IOException ex) {
-//                System.out.println("IOException is caught");
-//            } catch (ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//
 
         Button saveButton = new Button("save");
         saveButton.setOnAction(event -> {
@@ -212,22 +179,6 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         });
-//        Button saveButton = new Button("save");
-//        saveButton.setOnAction(event -> {
-//            try {
-//                FileOutputStream file = new FileOutputStream("Save.ser"); // defines destination for file
-//                ObjectOutputStream out = new ObjectOutputStream(file);
-//
-//                out.writeObject(listOfActivities); // selects what to save
-//
-//                out.close();
-//                file.close(); //closes file
-//                System.out.println("Serialization complete!//Saved");
-//            } catch (IOException ex) {
-//                System.out.println("IOException is caught");
-//            }
-//        });
-
 
         // Exit button to end the application
         Button exitButton = new Button("exit");
