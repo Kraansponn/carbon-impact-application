@@ -16,6 +16,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends Application {
 
@@ -24,7 +28,7 @@ public class Main extends Application {
     //
     private TableView<Activity> table = new TableView<Activity>();
     //
-    private final ObservableList<Activity> data =
+    private ObservableList<Activity> data =
             FXCollections.observableArrayList(
                     new Activity(1, 22, "Fishing", 7),
                     new Activity(2, 26, "running", 2),
@@ -128,39 +132,74 @@ public class Main extends Application {
         Button loadButton = new Button("load"); // have to fix
         loadButton.setOnAction(event -> {
             try {
-                // Reading the object from a file
-                FileInputStream file = new FileInputStream("Save.ser");
-                ObjectInputStream in = new ObjectInputStream(file);
-
-                listOfActivities = (ListOfActivities) in.readObject();
-
+                FileInputStream fileIn = new FileInputStream("Save.ser");
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                System.out.println("Deserialized Data: \n" + in.readObject().toString());
                 in.close();
-                file.close();
-
-                System.out.println("Deserialization Complete!//loaded");
-            } catch (IOException ex) {
-                System.out.println("IOException is caught");
+                fileIn.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         });
 
+//       //loads in data from a fixed position
+//        Button loadButton = new Button("load"); // have to fix
+//        loadButton.setOnAction(event -> {
+//            try {
+//                // Reading the object from a file
+//                FileInputStream file = new FileInputStream("Save.ser");
+//                ObjectInputStream in = new ObjectInputStream(file);
+//
+//                listOfActivities = (ListOfActivities) in.readObject();
+//
+//                in.close();
+//                file.close();
+//
+//                System.out.println("Deserialization Complete!//loaded");
+//            } catch (IOException ex) {
+//                System.out.println("IOException is caught");
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
 
         Button saveButton = new Button("save");
         saveButton.setOnAction(event -> {
             try {
-                FileOutputStream file = new FileOutputStream("Save.ser"); // defines destination for file
-                ObjectOutputStream out = new ObjectOutputStream(file);
+                // write object to file
+                FileOutputStream fos = new FileOutputStream("Save.ser");
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(new ArrayList<Activity>(data));
+                oos.close();
 
-                out.writeObject(listOfActivities); // selects what to save
 
-                out.close();
-                file.close(); //closes file
-                System.out.println("Serialization complete!//Saved");
-            } catch (IOException ex) {
-                System.out.println("IOException is caught");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
         });
+//        Button saveButton = new Button("save");
+//        saveButton.setOnAction(event -> {
+//            try {
+//                FileOutputStream file = new FileOutputStream("Save.ser"); // defines destination for file
+//                ObjectOutputStream out = new ObjectOutputStream(file);
+//
+//                out.writeObject(listOfActivities); // selects what to save
+//
+//                out.close();
+//                file.close(); //closes file
+//                System.out.println("Serialization complete!//Saved");
+//            } catch (IOException ex) {
+//                System.out.println("IOException is caught");
+//            }
+//        });
 
 
         // Exit button to end the application
