@@ -126,7 +126,17 @@ public class Main extends Application {
         });
 
         Button listButton = new Button("list");
+        listButton.setOnAction(event -> {
+            table.refresh();
+            //data.();  have to fix this
+        });
         Button summaryButton = new Button("summary");
+
+
+
+
+
+
 
         //loads in data from a fixed position
         Button loadButton = new Button("load"); // have to fix
