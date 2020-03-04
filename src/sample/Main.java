@@ -20,10 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
-
-    private static ListOfActivities listOfActivities = new ListOfActivities();
-
     private TableView<Activity> table = new TableView<Activity>();
+    private TableView<Activity> table2 = new TableView<Activity>();
     private ObservableList<Activity> data = FXCollections.observableArrayList(); //creates arraylist to store table data
 
     @Override
@@ -68,18 +66,21 @@ public class Main extends Application {
         table.setItems(data);                                                   //defining where the table gets its data from
         table.getColumns().addAll(weekCol, dateCol, activityCol, pointsCol);    //adding all the columns to the table
 
-        //Creating Grid
-        GridPane gridPane = new GridPane();
-
-        //setting postions on labels and text fields in grid
-        gridPane.add(labelWeek, 0, 0);
-        gridPane.add(textFieldWeek, 1, 0);
-        gridPane.add(labelDate, 0, 1);
-        gridPane.add(textFieldDate, 1, 1);
-        gridPane.add(labelActivity, 0, 2);
-        gridPane.add(textFieldActivity, 1, 2);
-        gridPane.add(labelPoints, 0, 3);
-        gridPane.add(textFieldPoints, 1, 3);
+        table2.setItems(data);
+        table2.getColumns().addAll(weekCol, dateCol, activityCol, pointsCol);
+//
+//        //Creating Grid
+//        GridPane gridPane = new GridPane();
+//
+//        //setting postions on labels and text fields in grid
+//        gridPane.add(labelWeek, 0, 0);
+//        gridPane.add(textFieldWeek, 1, 0);
+//        gridPane.add(labelDate, 0, 1);
+//        gridPane.add(textFieldDate, 1, 1);
+//        gridPane.add(labelActivity, 0, 2);
+//        gridPane.add(textFieldActivity, 1, 2);
+//        gridPane.add(labelPoints, 0, 3);
+//        gridPane.add(textFieldPoints, 1, 3);
 
         //Creating buttons
 
@@ -188,19 +189,37 @@ public class Main extends Application {
 
         //Setting up Tabs
 
-        TabPane tabPane = new TabPane();
+        Tab tab1 = new Tab("Introduction");
+        Tab tab2 = new Tab("Activity Manager");
+        Tab tab3 = new Tab("Results");
+        Tab tab4 = new Tab("Add New Activities");
 
-        Tab tab1 = new Tab("Introduction", new Label("Introduction"));
-        Tab tab2 = new Tab("Activity Manager"  , new Label("Activity Manger"));
-        Tab tab3 = new Tab("Results" , new Label("Results"));
+        //Tab1
 
-        tabPane.getTabs().add(tab1);
-        tabPane.getTabs().add(tab2);
-        tabPane.getTabs().add(tab3);
+        TabPane tabPane1 = new TabPane();
 
+        tabPane1.getTabs().add(tab1);
+        tabPane1.getTabs().add(tab2);
+        tabPane1.getTabs().add(tab3);
+        tabPane1.getTabs().add(tab4);
 
+        VBox vBoxTab1 = new VBox();
+        Label tab1test = new Label("Some intro text to tell you about what this app does");
+
+        vBoxTab1.getChildren().addAll(tabPane1,tab1test);
+
+        Scene tab1Scene = new Scene(vBoxTab1,800,600);
 
         //Tab2
+
+        TabPane tabPane2 = new TabPane();
+
+        tabPane2.getTabs().add(tab1);
+        tabPane2.getTabs().add(tab2);
+        tabPane2.getTabs().add(tab3);
+        tabPane2.getTabs().add(tab4);
+
+
         HBox hBox1Tab2 = new HBox();
         hBox1Tab2.getChildren().addAll(labelWeek, textFieldWeek);
         HBox hBox2Tab2 = new HBox();
@@ -217,7 +236,54 @@ public class Main extends Application {
         hBox7Tab2.getChildren().addAll(loadButton, saveButton, exitButton);
 
         VBox vBoxTab2 = new VBox();
-        vBoxTab2.getChildren().addAll(tabPane,hBox1Tab2,hBox2Tab2,hBox3Tab2,hBox4Tab2,hBox5Tab2,hBox6Tab2,hBox7Tab2);
+        vBoxTab2.getChildren().addAll(tabPane2,hBox1Tab2,hBox2Tab2,hBox3Tab2,hBox4Tab2,hBox5Tab2,hBox6Tab2,hBox7Tab2);
+        Scene tab2Scene = new Scene(vBoxTab2,800,600);
+
+        //tab3
+
+
+        TabPane tabPane3 = new TabPane();
+
+        tabPane3.getTabs().add(tab1);
+        tabPane3.getTabs().add(tab2);
+        tabPane3.getTabs().add(tab3);
+        tabPane3.getTabs().add(tab4);
+
+        Label tab3test = new Label("tab3test");
+
+        VBox vBoxTab3 = new VBox();
+
+        vBoxTab3.getChildren().addAll(tabPane3,tab3test,table2);
+
+        Scene tab3Scene = new Scene(vBoxTab3,800,600);
+
+        //dont use the table to show data but use comparitiors
+        //show a total
+
+//tab4
+        TabPane tabPane4 = new TabPane();
+
+        tabPane4.getTabs().add(tab1);
+        tabPane4.getTabs().add(tab2);
+        tabPane4.getTabs().add(tab3);
+        tabPane4.getTabs().add(tab4);
+
+        Label tab4test = new Label("Some sort of way to add and remove activities that will be then shown in the drop down menu");
+
+        VBox vBoxTab4 = new VBox();
+
+        vBoxTab4.getChildren().addAll(tabPane4,tab4test);
+
+        Scene tab4Scene = new Scene(vBoxTab4,800,600);
+
+
+
+        //adding ability to change scenes to tabs
+        tab1.setOnSelectionChanged(event -> {primaryStage.setScene(tab1Scene);});
+        tab2.setOnSelectionChanged(event -> {primaryStage.setScene(tab2Scene);});
+        tab3.setOnSelectionChanged(event -> {primaryStage.setScene(tab3Scene);});
+        tab4.setOnSelectionChanged(event -> {primaryStage.setScene(tab4Scene);});
+
 //
 //        //setting postions on buttons in grid
 //        gridPane.add(addButton, 0, 4);
@@ -237,7 +303,7 @@ public class Main extends Application {
 //        gridPane.setHgap(5);
 
         //Displaying the Scene
-        primaryStage.setScene(new Scene(vBoxTab2));
+        primaryStage.setScene(tab1Scene);
         primaryStage.show();
 
     }
