@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -33,10 +35,10 @@ public class Main extends Application {
         primaryStage.setHeight(600);
 
         //Creating the labels
-        Label labelWeek = new Label("Week: ");
-        Label labelDate = new Label("Date: ");
-        Label labelActivity = new Label("Activity: ");
-        Label labelPoints = new Label("Points: ");
+        Label labelWeek = new Label("Week:     ");
+        Label labelDate = new Label("Date:      ");
+        Label labelActivity = new Label("Activity:  ");
+        Label labelPoints = new Label("Points:    ");
 
         //creating the text fields for the labels
         TextField textFieldWeek = new TextField();
@@ -184,25 +186,58 @@ public class Main extends Application {
         Button exitButton = new Button("exit");
         exitButton.setOnAction(e -> Platform.exit());
 
-        //setting postions on buttons in grid
-        gridPane.add(addButton, 0, 4);
-        gridPane.add(removeButton, 1, 4);
-        gridPane.add(listButton, 2, 4);
-        gridPane.add(summaryButton, 3, 4);
-        gridPane.add(table, 0, 5);
-        gridPane.add(loadButton, 0, 6);
-        gridPane.add(saveButton, 1, 6);
-        gridPane.add(exitButton, 3, 6);
+        //Setting up Tabs
 
-        //Setting the padding
-        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        TabPane tabPane = new TabPane();
 
-        //Setting the vertical and horizontal gaps between the columns
-        gridPane.setVgap(5);
-        gridPane.setHgap(5);
+        Tab tab1 = new Tab("Introduction", new Label("Introduction"));
+        Tab tab2 = new Tab("Activity Manager"  , new Label("Activity Manger"));
+        Tab tab3 = new Tab("Results" , new Label("Results"));
+
+        tabPane.getTabs().add(tab1);
+        tabPane.getTabs().add(tab2);
+        tabPane.getTabs().add(tab3);
+
+
+
+        //Tab2
+        HBox hBox1Tab2 = new HBox();
+        hBox1Tab2.getChildren().addAll(labelWeek, textFieldWeek);
+        HBox hBox2Tab2 = new HBox();
+        hBox2Tab2.getChildren().addAll(labelDate, textFieldDate);
+        HBox hBox3Tab2 = new HBox();
+        hBox3Tab2.getChildren().addAll(labelActivity, textFieldActivity);
+        HBox hBox4Tab2 = new HBox();
+        hBox4Tab2.getChildren().addAll(labelPoints, textFieldPoints);
+        HBox hBox5Tab2 = new HBox();
+        hBox5Tab2.getChildren().addAll(addButton, removeButton, listButton, summaryButton);
+        HBox hBox6Tab2 = new HBox();
+        hBox6Tab2.getChildren().addAll(table);
+        HBox hBox7Tab2 = new HBox();
+        hBox7Tab2.getChildren().addAll(loadButton, saveButton, exitButton);
+
+        VBox vBoxTab2 = new VBox();
+        vBoxTab2.getChildren().addAll(tabPane,hBox1Tab2,hBox2Tab2,hBox3Tab2,hBox4Tab2,hBox5Tab2,hBox6Tab2,hBox7Tab2);
+//
+//        //setting postions on buttons in grid
+//        gridPane.add(addButton, 0, 4);
+//        gridPane.add(removeButton, 1, 4);
+//        gridPane.add(listButton, 2, 4);
+//        gridPane.add(summaryButton, 3, 4);
+//        gridPane.add(table, 0, 5);
+//        gridPane.add(loadButton, 0, 6);
+//        gridPane.add(saveButton, 1, 6);
+//        gridPane.add(exitButton, 3, 6);
+//
+//        //Setting the padding
+//        gridPane.setPadding(new Insets(10, 10, 10, 10));
+//
+//        //Setting the vertical and horizontal gaps between the columns
+//        gridPane.setVgap(5);
+//        gridPane.setHgap(5);
 
         //Displaying the Scene
-        primaryStage.setScene(new Scene(gridPane));
+        primaryStage.setScene(new Scene(vBoxTab2));
         primaryStage.show();
 
     }
