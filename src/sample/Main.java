@@ -87,6 +87,7 @@ public class Main extends Application {
         //Creating buttons
 
         //button for adding in new activities
+
         Button addButton = new Button("add");
         addButton.setOnAction(event -> {
             try {
@@ -197,6 +198,12 @@ public class Main extends Application {
         Tab tab4 = new Tab("Add New Activities");
 
         //Tab1
+
+
+//  Put tabs into their own methods
+
+
+
 
         TabPane tabPane1 = new TabPane();
 
