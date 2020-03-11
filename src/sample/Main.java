@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main extends Application {
     private TableView<Activity> table = new TableView<Activity>();
@@ -41,8 +42,22 @@ public class Main extends Application {
         //creating the text fields for the labels
         TextField textFieldWeek = new TextField();
         TextField textFieldDate = new TextField();
-        TextField textFieldActivity = new TextField();
+//        TextField textFieldActivity = new TextField();
         TextField textFieldPoints = new TextField();
+
+        // ComboBox and loading in activites
+        Scanner s = new Scanner(new File("Activities.txt"));    //file with activites to load in
+        ArrayList<String> comboBoxItems = new ArrayList<String>();    //Creating arraylist to store Activities
+        while (s.hasNext()) {
+            comboBoxItems.add(s.next());
+        }
+        s.close();
+
+        //making combobox for activities
+        ComboBox comboBoxActivity = new ComboBox();
+        for (int i = 0; i < comboBoxItems.size(); i++) {
+            comboBoxActivity.getItems().add(comboBoxItems.get(i));
+        }
 
         //Creating a table to display data
         table.setEditable(false);
@@ -68,19 +83,6 @@ public class Main extends Application {
 
         table2.setItems(data);
         table2.getColumns().addAll(weekCol, dateCol, activityCol, pointsCol);
-//
-//        //Creating Grid
-//        GridPane gridPane = new GridPane();
-//
-//        //setting postions on labels and text fields in grid
-//        gridPane.add(labelWeek, 0, 0);
-//        gridPane.add(textFieldWeek, 1, 0);
-//        gridPane.add(labelDate, 0, 1);
-//        gridPane.add(textFieldDate, 1, 1);
-//        gridPane.add(labelActivity, 0, 2);
-//        gridPane.add(textFieldActivity, 1, 2);
-//        gridPane.add(labelPoints, 0, 3);
-//        gridPane.add(textFieldPoints, 1, 3);
 
         //Creating buttons
 
@@ -90,7 +92,7 @@ public class Main extends Application {
             try {
                 int newWeek = Integer.parseInt(textFieldWeek.getText()); //getting data out of text field and changing to int as needed
                 int newDate = Integer.parseInt(textFieldDate.getText());
-                String newActivity = textFieldActivity.getText();
+                String newActivity = comboBoxActivity.getValue().toString();
                 int newPoints = Integer.parseInt(textFieldPoints.getText());
 
                 if ((newPoints > -11) && (newPoints < 11)) {                        //making sure the points value is within a desired value
@@ -104,7 +106,7 @@ public class Main extends Application {
             }
             textFieldWeek.clear(); // clearing text fields
             textFieldDate.clear();
-            textFieldActivity.clear();
+//            textFieldActivity.clear();
             textFieldPoints.clear();
         });
 
@@ -206,9 +208,9 @@ public class Main extends Application {
         VBox vBoxTab1 = new VBox();
         Label tab1test = new Label("Some intro text to tell you about what this app does");
 
-        vBoxTab1.getChildren().addAll(tabPane1,tab1test);
+        vBoxTab1.getChildren().addAll(tabPane1, tab1test);
 
-        Scene tab1Scene = new Scene(vBoxTab1,800,600);
+        Scene tab1Scene = new Scene(vBoxTab1, 800, 600);
 
         //Tab2
 
@@ -219,13 +221,12 @@ public class Main extends Application {
         tabPane2.getTabs().add(tab3);
         tabPane2.getTabs().add(tab4);
 
-
         HBox hBox1Tab2 = new HBox();
         hBox1Tab2.getChildren().addAll(labelWeek, textFieldWeek);
         HBox hBox2Tab2 = new HBox();
         hBox2Tab2.getChildren().addAll(labelDate, textFieldDate);
         HBox hBox3Tab2 = new HBox();
-        hBox3Tab2.getChildren().addAll(labelActivity, textFieldActivity);
+        hBox3Tab2.getChildren().addAll(labelActivity, comboBoxActivity);
         HBox hBox4Tab2 = new HBox();
         hBox4Tab2.getChildren().addAll(labelPoints, textFieldPoints);
         HBox hBox5Tab2 = new HBox();
@@ -236,8 +237,8 @@ public class Main extends Application {
         hBox7Tab2.getChildren().addAll(loadButton, saveButton, exitButton);
 
         VBox vBoxTab2 = new VBox();
-        vBoxTab2.getChildren().addAll(tabPane2,hBox1Tab2,hBox2Tab2,hBox3Tab2,hBox4Tab2,hBox5Tab2,hBox6Tab2,hBox7Tab2);
-        Scene tab2Scene = new Scene(vBoxTab2,800,600);
+        vBoxTab2.getChildren().addAll(tabPane2, hBox1Tab2, hBox2Tab2, hBox3Tab2, hBox4Tab2, hBox5Tab2, hBox6Tab2, hBox7Tab2);
+        Scene tab2Scene = new Scene(vBoxTab2, 800, 600);
 
         //tab3
 
@@ -253,9 +254,9 @@ public class Main extends Application {
 
         VBox vBoxTab3 = new VBox();
 
-        vBoxTab3.getChildren().addAll(tabPane3,tab3test,table2);
+        vBoxTab3.getChildren().addAll(tabPane3, tab3test, table2);
 
-        Scene tab3Scene = new Scene(vBoxTab3,800,600);
+        Scene tab3Scene = new Scene(vBoxTab3, 800, 600);
 
         //dont use the table to show data but use comparitiors
         //show a total
@@ -268,39 +269,64 @@ public class Main extends Application {
         tabPane4.getTabs().add(tab3);
         tabPane4.getTabs().add(tab4);
 
-        Label tab4test = new Label("Some sort of way to add and remove activities that will be then shown in the drop down menu");
+        Label labelEnterNewActivity = new Label("Enter New Activity");
+        TextField textFieldNewActivity = new TextField();
+
+        Button buttonAddActivity = new Button("list");
+        buttonAddActivity.setOnAction(event -> {
+
+            comboBoxItems.add(textFieldNewActivity.getText().replace(" ", "_"));
+
+
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter("Activities.txt");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            for (String str : comboBoxItems) {
+                try {
+                    writer.write(str + System.lineSeparator());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            comboBoxActivity.getItems().add(textFieldNewActivity.getText().replace(" ", "_"));
+            textFieldNewActivity.clear();
+        });
+
+
+        HBox hBox1Tab4 = new HBox();
+        HBox hBox2Tab4 = new HBox();
+
+        hBox1Tab4.getChildren().addAll(labelEnterNewActivity, textFieldNewActivity);
+        hBox2Tab4.getChildren().addAll(buttonAddActivity);
 
         VBox vBoxTab4 = new VBox();
 
-        vBoxTab4.getChildren().addAll(tabPane4,tab4test);
+        vBoxTab4.getChildren().addAll(tabPane4, hBox1Tab4, hBox2Tab4);
 
-        Scene tab4Scene = new Scene(vBoxTab4,800,600);
-
-
+        Scene tab4Scene = new Scene(vBoxTab4, 800, 600);
 
         //adding ability to change scenes to tabs
-        tab1.setOnSelectionChanged(event -> {primaryStage.setScene(tab1Scene);});
-        tab2.setOnSelectionChanged(event -> {primaryStage.setScene(tab2Scene);});
-        tab3.setOnSelectionChanged(event -> {primaryStage.setScene(tab3Scene);});
-        tab4.setOnSelectionChanged(event -> {primaryStage.setScene(tab4Scene);});
+        tab1.setOnSelectionChanged(event -> {
+            primaryStage.setScene(tab1Scene);
+        });
+        tab2.setOnSelectionChanged(event -> {
+            primaryStage.setScene(tab2Scene);
+        });
+        tab3.setOnSelectionChanged(event -> {
+            primaryStage.setScene(tab3Scene);
+        });
+        tab4.setOnSelectionChanged(event -> {
+            primaryStage.setScene(tab4Scene);
+        });
 
-//
-//        //setting postions on buttons in grid
-//        gridPane.add(addButton, 0, 4);
-//        gridPane.add(removeButton, 1, 4);
-//        gridPane.add(listButton, 2, 4);
-//        gridPane.add(summaryButton, 3, 4);
-//        gridPane.add(table, 0, 5);
-//        gridPane.add(loadButton, 0, 6);
-//        gridPane.add(saveButton, 1, 6);
-//        gridPane.add(exitButton, 3, 6);
-//
-//        //Setting the padding
-//        gridPane.setPadding(new Insets(10, 10, 10, 10));
-//
-//        //Setting the vertical and horizontal gaps between the columns
-//        gridPane.setVgap(5);
-//        gridPane.setHgap(5);
 
         //Displaying the Scene
         primaryStage.setScene(tab1Scene);
