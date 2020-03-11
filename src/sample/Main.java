@@ -2,8 +2,10 @@ package sample;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.binding.NumberBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -16,13 +18,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main extends Application {
     private TableView<Activity> table = new TableView<Activity>();
-    private TableView<Activity> table2 = new TableView<Activity>();
+    //    private TableView<Activity> table2 = new TableView<Activity>();
     private ObservableList<Activity> data = FXCollections.observableArrayList(); //creates arraylist to store table data
 
     @Override
@@ -30,8 +30,8 @@ public class Main extends Application {
         //defining the Menu size
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Kornel");
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(600);
+        primaryStage.setWidth(700);
+        primaryStage.setHeight(700);
 
         //Creating the labels
         Label labelWeek = new Label("Week:     ");
@@ -81,8 +81,8 @@ public class Main extends Application {
         table.setItems(data);                                                   //defining where the table gets its data from
         table.getColumns().addAll(weekCol, dateCol, activityCol, pointsCol);    //adding all the columns to the table
 
-        table2.setItems(data);
-        table2.getColumns().addAll(weekCol, dateCol, activityCol, pointsCol);
+//        table2.setItems(data);
+//        table2.getColumns().addAll(weekCol, dateCol, activityCol, pointsCol);
 
         //Creating buttons
 
@@ -206,11 +206,12 @@ public class Main extends Application {
         tabPane1.getTabs().add(tab4);
 
         VBox vBoxTab1 = new VBox();
-        Label tab1test = new Label("Some intro text to tell you about what this app does");
+        Label labelTab1 = new Label("This is an introduction screen");
+        Label labelTab2 = new Label("This app is designed to enable you to track your carbon emissions");
 
-        vBoxTab1.getChildren().addAll(tabPane1, tab1test);
+        vBoxTab1.getChildren().addAll(tabPane1, labelTab1, labelTab2);
 
-        Scene tab1Scene = new Scene(vBoxTab1, 800, 600);
+        Scene tab1Scene = new Scene(vBoxTab1, 700, 700);
 
         //Tab2
 
@@ -238,10 +239,15 @@ public class Main extends Application {
 
         VBox vBoxTab2 = new VBox();
         vBoxTab2.getChildren().addAll(tabPane2, hBox1Tab2, hBox2Tab2, hBox3Tab2, hBox4Tab2, hBox5Tab2, hBox6Tab2, hBox7Tab2);
-        Scene tab2Scene = new Scene(vBoxTab2, 800, 600);
+        Scene tab2Scene = new Scene(vBoxTab2, 700, 700);
 
         //tab3
-
+        final ListView listView = new ListView();
+        listView.setPrefSize(200, 250);
+        listView.setEditable(true);
+        SortedList<String> sortedList = new SortedList(data);
+        Collections.sort(sortedList);
+        listView.setItems(sortedList);
 
         TabPane tabPane3 = new TabPane();
 
@@ -250,16 +256,13 @@ public class Main extends Application {
         tabPane3.getTabs().add(tab3);
         tabPane3.getTabs().add(tab4);
 
-        Label tab3test = new Label("tab3test");
+        Label tab3test = new Label("List of Activities");
 
         VBox vBoxTab3 = new VBox();
 
-        vBoxTab3.getChildren().addAll(tabPane3, tab3test, table2);
+        vBoxTab3.getChildren().addAll(tabPane3, tab3test, listView);
 
-        Scene tab3Scene = new Scene(vBoxTab3, 800, 600);
-
-        //dont use the table to show data but use comparitiors
-        //show a total
+        Scene tab3Scene = new Scene(vBoxTab3, 700, 700);
 
 //tab4
         TabPane tabPane4 = new TabPane();
@@ -272,7 +275,7 @@ public class Main extends Application {
         Label labelEnterNewActivity = new Label("Enter New Activity");
         TextField textFieldNewActivity = new TextField();
 
-        Button buttonAddActivity = new Button("list");
+        Button buttonAddActivity = new Button("add");
         buttonAddActivity.setOnAction(event -> {
 
             comboBoxItems.add(textFieldNewActivity.getText().replace(" ", "_"));
@@ -311,7 +314,7 @@ public class Main extends Application {
 
         vBoxTab4.getChildren().addAll(tabPane4, hBox1Tab4, hBox2Tab4);
 
-        Scene tab4Scene = new Scene(vBoxTab4, 800, 600);
+        Scene tab4Scene = new Scene(vBoxTab4, 700, 700);
 
         //adding ability to change scenes to tabs
         tab1.setOnSelectionChanged(event -> {
@@ -327,13 +330,11 @@ public class Main extends Application {
             primaryStage.setScene(tab4Scene);
         });
 
-
         //Displaying the Scene
         primaryStage.setScene(tab1Scene);
         primaryStage.show();
 
     }
-
 
     public static void main(String[] args) {
         launch(args);
