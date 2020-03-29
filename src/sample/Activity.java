@@ -2,7 +2,7 @@ package sample;
 
 import java.io.Serializable;
 
-public class Activity implements Serializable, Comparable {
+public class Activity implements Serializable{
     private int week;
     private int date;
     private String activity;
@@ -47,14 +47,20 @@ public class Activity implements Serializable, Comparable {
         this.points = points;
     }
 
-    @Override
-    public int compareTo(Activity comparestu) {
-        int compareage = ((Activity) comparestu).getPoints();
-        return this.points - compareage;
-    }
+//    @Override
+//    public int compareTo(Activity comparestu) {
+//        int compareage = ((Activity) comparestu).getPoints();
+//        return this.points - compareage;
+//    }
 
     @Override
     public String toString() {
         return "[ date=" + date + ", week=" + week + ", activity=" + activity + ", points=" + points + "]";
     }
+//
+//    @Override
+//    public int compareTo(Object o) {
+//        int compareage = ((Activity) o).getPoints();
+//        return this.points - compareage;
+//    }
 }

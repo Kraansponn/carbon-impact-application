@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Random;
 import java.io.*;
 import java.util.*;
 
@@ -122,10 +123,11 @@ public class Main extends Application {
         Button listButton = new Button("list");
         listButton.setOnAction(event -> {
             table.refresh();
-            Collections.sort(data);
-
-            for(Activity str: data){
-                System.out.println(str);
+//            Collections.sort(data);
+//
+//            for(Activity str: data) {
+//                System.out.println(str);
+//            }
         });
 
         //button that adds up all of the points
@@ -205,8 +207,6 @@ public class Main extends Application {
 
 
 //  Put tabs into their own methods
-
-
 
 
         TabPane tabPane1 = new TabPane();
@@ -314,16 +314,33 @@ public class Main extends Application {
             textFieldNewActivity.clear();
         });
 
+        Button buttonGenerateRandomActivityData = new Button("Generate Random Activity Data");
+        buttonGenerateRandomActivityData.setOnAction(event -> {
+            System.out.println("hello");
+            for (int i = 0; i < 100; i++) {
+                int randomActivityRange = comboBoxItems.size();
+                int randomActivity =(int)(Math.random() * (randomActivityRange-1 - 0 + 1) + 0);
+                int newWeek = (int) (Math.random() * (52 - 0 + 1) + 0);
+                int newDate = (int) (Math.random() * (30 - 1 + 1) + 1);
+                String newActivity = comboBoxItems.get(randomActivity);
+//                String newActivity = comboBoxActivity.get(randomActivity).toString();
+//                String newActivity = "jeff";
+                int newPoints = (int) (Math.random() * (10 - (-10) + 1) + (-10));
+                data.add(new Activity(newWeek, newDate, newActivity, newPoints));
+            }
+        });
 
         HBox hBox1Tab4 = new HBox();
         HBox hBox2Tab4 = new HBox();
+        HBox hBox3Tab4 = new HBox();
 
         hBox1Tab4.getChildren().addAll(labelEnterNewActivity, textFieldNewActivity);
         hBox2Tab4.getChildren().addAll(buttonAddActivity);
+        hBox3Tab4.getChildren().addAll(buttonGenerateRandomActivityData);
 
         VBox vBoxTab4 = new VBox();
 
-        vBoxTab4.getChildren().addAll(tabPane4, hBox1Tab4, hBox2Tab4);
+        vBoxTab4.getChildren().addAll(tabPane4, hBox1Tab4, hBox2Tab4, hBox3Tab4);
 
         Scene tab4Scene = new Scene(vBoxTab4, 700, 700);
 
