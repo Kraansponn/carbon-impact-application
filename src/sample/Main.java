@@ -122,6 +122,10 @@ public class Main extends Application {
         Button listButton = new Button("list");
         listButton.setOnAction(event -> {
             table.refresh();
+            Collections.sort(data);
+
+            for(Activity str: data){
+                System.out.println(str);
         });
 
         //button that adds up all of the points
