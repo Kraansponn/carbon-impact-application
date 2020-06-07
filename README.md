@@ -1,5 +1,5 @@
 # Carbon Impact Tracker
-This is a Application where a user can add in their activites and the carbon impact of those activities. The data is stored using Serialization.
+This is a Application where a user can add and track their activites and the carbon impact of those activities. The data is stored using Serialization.
 
 # Details
 This is written in java and the ui is made using javaFX
